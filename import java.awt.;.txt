@@ -1,0 +1,115 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+
+class VehicleMaintenanceSystem extends Frame implements ActionListener {
+    // GUI Components
+    Label lblTitle, lblVehicle, lblTask, lblDate, lblReminder;
+    TextField txtVehicle, txtTask, txtDate, txtReminder;
+    Button btnAdd, btnShow;
+    TextArea txtArea;
+    
+    // Data storage
+    ArrayList<String> maintenanceRecords;
+
+    VehicleMaintenanceSystem() {
+        // Initialize the maintenance records list
+        maintenanceRecords = new ArrayList<>();
+
+        // Set layout and title
+        setLayout(new FlowLayout());
+        setTitle("Vehicle Maintenance System");
+        setSize(400, 500);
+
+        // Components for title
+        lblTitle = new Label("Vehicle Maintenance System");
+        lblTitle.setFont(new Font("Arial", Font.BOLD, 18));
+        add(lblTitle);
+
+        // Components for adding maintenance details
+        lblVehicle = new Label("Vehicle Name:");
+        txtVehicle = new TextField(20);
+        lblTask = new Label("Maintenance Task:");
+        txtTask = new TextField(20);
+        lblDate = new Label("Date (YYYY-MM-DD):");
+        txtDate = new TextField(20);
+        lblReminder = new Label("Reminder (Days):");
+        txtReminder = new TextField(20);
+
+        // Buttons
+        btnAdd = new Button("Add Maintenance");
+        btnShow = new Button("Show Records");
+
+        // Text area to display records
+        txtArea = new TextArea(15, 35);
+
+        // Adding components to the frame
+        add(lblVehicle);
+        add(txtVehicle);
+        add(lblTask);
+        add(txtTask);
+        add(lblDate);
+        add(txtDate);
+        add(lblReminder);
+        add(txtReminder);
+        add(btnAdd);
+        add(btnShow);
+        add(txtArea);
+
+        // Add action listeners
+        btnAdd.addActionListener(this);
+        btnShow.addActionListener(this);
+
+        // Window closing event
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                dispose();
+            }
+        });
+
+        setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btnAdd) {
+            // Get input values
+            String vehicle = txtVehicle.getText().trim();
+            String task = txtTask.getText().trim();
+            String date = txtDate.getText().trim();
+            String reminder = txtReminder.getText().trim();
+
+            // Validate inputs
+            if (vehicle.isEmpty() || task.isEmpty() || date.isEmpty() || reminder.isEmpty()) {
+                txtArea.setText("Please fill in all fields.");
+                return;
+            }
+
+            // Add record to the list
+            String record = "Vehicle: " + vehicle + ", Task: " + task + ", Date: " + date + ", Reminder: " + reminder + " days.";
+            maintenanceRecords.add(record);
+            txtArea.setText("Maintenance record added successfully!");
+
+            // Clear input fields
+            txtVehicle.setText("");
+            txtTask.setText("");
+            txtDate.setText("");
+            txtReminder.setText("");
+        } else if (e.getSource() == btnShow) {
+            // Show all maintenance records
+            if (maintenanceRecords.isEmpty()) {
+                txtArea.setText("No maintenance records found.");
+            } else {
+                StringBuilder records = new StringBuilder("Maintenance Records:\n");
+                for (String record : maintenanceRecords) {
+                    records.append(record).append("\n");
+                }
+                txtArea.setText(records.toString());
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        new VehicleMaintenanceSystem();
+    }
+}
